@@ -23,10 +23,10 @@
 // * `options.port` - the server port. Defaults to `8080`
 // * `options.path` - the REST API path. Defaults to `'/rhq-metrics/metrics'`
 function RHQ(options) {
-  if (!this instanceof RHQ) return new RHQ(options);
+  if (!(this instanceof RHQ)) return new RHQ(options);
   options = options || {};
   this.host = options.host || 'localhost';
-  this.port = options.port || '8080';
+  this.port = options.port || 8080;
   this.path = options.path || '/rhq-metrics/metrics';
 }
 
