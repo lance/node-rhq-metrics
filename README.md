@@ -1,6 +1,6 @@
 # node-rqh-metrics
 
-[![Build Status](https://travis-ci.org/lance/node-rhq-metrics.svg?branch=master)](https://travis-ci.org/lance/node-rhq-metrics)
+[![Build Status](https://travis-ci.org/lance/rhq-metrics-js.svg?branch=master)](https://travis-ci.org/lance/rhq-metrics-js)
 
 This is a Javascript API and NPM module package for the `rhq-metrics` server.
 

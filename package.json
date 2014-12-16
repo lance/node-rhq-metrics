@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/lance/node-rhq-metrics.git"
+    "url": "http://github.com/lance/rhq-metrics-js.git"
   },
-  "bugs": "http://github.com/lance/node-rhq-metrics/issues"
+  "bugs": "http://github.com/lance/rhq-metrics-js/issues"
 }
