@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     },
     docco: {
       debug: {
-        src: ['src/**/*.js'],
+        src: ['index.js'],
         options: {
           output: 'doc/'
         }
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      all: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js']
+      all: ['Gruntfile.js', 'index.js', 'test/**/*.js']
     }
   });
 

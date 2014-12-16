@@ -1,7 +1,7 @@
 var assert = require('assert');
 
 describe('node-rhq-metrics module', function() {
-  var RHQ = require('../src/node-rhq-metrics');
+  var RHQ = require('../');
 
   it('should export an RHQ constructor function', function() {
     assert(new RHQ() instanceof RHQ);
