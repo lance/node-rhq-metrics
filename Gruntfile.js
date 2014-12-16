@@ -3,15 +3,6 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-      },
-      build: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
-      }
-    },
     docco: {
       debug: {
         src: ['index.js'],
@@ -24,7 +15,7 @@ module.exports = function(grunt) {
       test: {
         options: {
           reporter: 'spec',
-          captureFile: 'build/test-results.txt',
+          captureFile: 'test-results.txt',
         },
         src: ['test/**/*.js']
       }
@@ -34,12 +25,11 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-docco');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint', 'mochaTest', 'docco', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'mochaTest', 'docco']);
 
 };

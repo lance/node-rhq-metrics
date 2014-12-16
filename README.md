@@ -28,4 +28,14 @@ This is a Javascript API and NPM module package for the `rhq-metrics` server.
 
 ## Development
 
-To build the package, run `grunt`
+First clone the project.
+
+    $ git clone https://github.com/lance/node-rhq-metrics.git
+
+Then change into the project directory, install the dev dependencies, and build it.
+
+    $ cd node-rhq-metrics
+    $ npm install
+    $ grunt
+
+This will run all tests and generate documentation.
