@@ -47,6 +47,17 @@ describe('node-rhq-metrics module', function() {
       assertThrowsWith([]);
       assertThrowsWith({});
     });
+
+    it('should callback with an exception if the server is not found', function() {
+      var sut = new RHQ({host:'badservername'});
+      sut.get('foo', function(err, result) {
+        assert(err instanceof Error);
+        assert(err.code === 'ENOTFOUND');
+      });
+    });
+
+
+    // TODO - figure out how to deal with rhq-metrics server during tests
   });
 
 });

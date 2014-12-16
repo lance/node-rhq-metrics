@@ -92,7 +92,7 @@ RHQ.prototype.get = function(id, options, callback) {
   });
 
   request.on('error', function(e) {
-    callback(new Error(e), null);
+    callback(e, null);
   });
 };
 
