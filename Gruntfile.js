@@ -7,7 +7,8 @@ module.exports = function(grunt) {
       debug: {
         src: ['index.js'],
         options: {
-          output: 'doc/'
+          output: 'doc/',
+          layout: 'classic'
         }
       }
     },

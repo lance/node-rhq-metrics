@@ -11,9 +11,14 @@
 //       port: 9000
 //     });
 //     
-//     rhq.get('server1', function(err, result) {
-//       console.log(result);
-//     });
+//     rhq.post({
+//       id: 'server1',
+//       value: 93.2,
+//       timestamp: Date.now()}, function(e) {
+//         rhq.get('server1', function(err, result) {
+//           console.log(result);
+//         });
+//       });
 //
 
 // _**RHQ**_ Create a new RHQ object.
@@ -96,6 +101,14 @@ RHQ.prototype.get = function(id, options, callback) {
   });
 };
 
+// _**RHQ.prototype.get**_ Get a set of time series data for a given `id`.
+// 
+// **data** Timeseries data to post to the rhq-metrics server. Can be either
+//   an object or an array of objects. Data objects should have the 
+//   following properties.
+//   * _id_ - The string ID for the data point, e.g. `cpu1`
+//   * _value_ The numeric value for the data point, e.g. `89.34`
+//   * _timestamp_ Milliseconds since the epoch, e.g. `Date.now()`
 RHQ.prototype.post = function(data, callback) {
   var httpOpts = {
     hostname: this.host,

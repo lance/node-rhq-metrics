@@ -31,9 +31,14 @@ and writing time-series data in RHQ-metrics.</p>
   port: <span class="hljs-number">9000</span>
 });
 
-rhq.get(<span class="hljs-string">'server1'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, result)</span> </span>{
-  <span class="hljs-built_in">console</span>.log(result);
-});
+rhq.post({
+  id: <span class="hljs-string">'server1'</span>,
+  value: <span class="hljs-number">93.2</span>,
+  timestamp: <span class="hljs-built_in">Date</span>.now()}, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    rhq.get(<span class="hljs-string">'server1'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, result)</span> </span>{
+      <span class="hljs-built_in">console</span>.log(result);
+    });
+  });
 </code></pre>
             </div>
             
@@ -136,7 +141,7 @@ and max calculated for each interval.</li>
   });
 
   request.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
-    callback(e, <span class="hljs-literal">null</span>);
+    callback(e);
   });
 };</pre></div></div>
             
@@ -148,6 +153,54 @@ and max calculated for each interval.</li>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><em><strong>RHQ.prototype.get</strong></em> Get a set of time series data for a given <code>id</code>.</p>
+<p><strong>data</strong> Timeseries data to post to the rhq-metrics server. Can be either
+  an object or an array of objects. Data objects should have the 
+  following properties.</p>
+<ul>
+<li><em>id</em> - The string ID for the data point, e.g. <code>cpu1</code></li>
+<li><em>value</em> The numeric value for the data point, e.g. <code>89.34</code></li>
+<li><em>timestamp</em> Milliseconds since the epoch, e.g. <code>Date.now()</code></li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>RHQ.prototype.post = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, callback)</span> </span>{
+  <span class="hljs-keyword">var</span> httpOpts = {
+    hostname: <span class="hljs-keyword">this</span>.host,
+    port: <span class="hljs-keyword">this</span>.port,
+    path: <span class="hljs-keyword">this</span>.path,
+    method: <span class="hljs-string">'POST'</span>,
+    headers: {
+      <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>
+    }
+  };
+
+  <span class="hljs-keyword">if</span> (!(data <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>)) data = [data];
+
+  <span class="hljs-keyword">var</span> request = http.request(httpOpts, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(res)</span> </span>{
+    process.nextTick(callback);
+  });
+
+  <span class="hljs-keyword">if</span> (!request) callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>());
+
+  request.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    callback(e);
+  });
+
+  request.write(<span class="hljs-built_in">JSON</span>.stringify(data));
+  request.end();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>If no callback is provided, just log what we get</p>
 
@@ -164,11 +217,11 @@ and max calculated for each interval.</li>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>A dataset has a default start parameter of 8 hours ago.</p>
 
@@ -181,11 +234,11 @@ and max calculated for each interval.</li>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>A dataset has a default end parameter of <code>Date.now()</code></p>
 
