@@ -13,18 +13,28 @@ This is a Javascript API and NPM module package for the `rhq-metrics` server.
       port: 4567, // defaults to 8080
       path: '/rhq-metrics/metrics' // defaults to '/rhq-metrics/metrics'
     });
-    
-    // all configuration parameters are optional
-    var options = {
-      start: Date.now()-(4*60*60*1000), // defaults to 8 hours ago
-      end: Date.now(), // defaults to now
-      buckets: 20 // defaults to null - data is not bucketed
-    };
 
-    rhq.get('server1', options, function(er, result) {
-        // result is an array of timeseries data
-        // [{'timestamp': 1418672557728, 'value': 72.3}]
-    });
+    // post some data
+    rhq.post([
+      {id: 'server1', value: 44.1, timestamp: 1418672557728},
+      {id: 'server1', value: 23.9, timestamp: 1418672557738},
+      {id: 'server1', value: 34.7, timestamp: 1418672557748},
+      {id: 'server1', value: 68.5, timestamp: 1418672557758}],
+
+      function() {
+    
+        // all configuration parameters are optional
+        var options = {
+          start: Date.now()-(4*60*60*1000), // defaults to 8 hours ago
+          end: Date.now(), // defaults to now
+          buckets: 20 // defaults to null - data is not bucketed
+        };
+
+        rhq.get('server1', options, function(er, result) {
+            // result is an array of timeseries data
+            // [{'timestamp': 1418672557728, 'value': 72.3}]
+        });
+      });
 
 ## Development
 
