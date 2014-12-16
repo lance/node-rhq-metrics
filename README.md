@@ -1,5 +1,7 @@
 # node-rqh-metrics
 
+[![Build Status](https://travis-ci.org/lance/node-rhq-metrics.svg?branch=master)](https://travis-ci.org/lance/node-rhq-metrics)
+
 This is a Javascript API and NPM module package for the `rhq-metrics` server.
 
 ## Usage
@@ -26,4 +28,4 @@ This is a Javascript API and NPM module package for the `rhq-metrics` server.
 
 ## Development
 
-To build the package: `$ grunt`
+To build the package, run `grunt`
