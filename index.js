@@ -92,9 +92,37 @@ RHQ.prototype.get = function(id, options, callback) {
   });
 
   request.on('error', function(e) {
-    callback(e, null);
+    callback(e);
   });
 };
+
+RHQ.prototype.post = function(data, callback) {
+  var httpOpts = {
+    hostname: this.host,
+    port: this.port,
+    path: this.path,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  if (!(data instanceof Array)) data = [data];
+
+  var request = http.request(httpOpts, function(res) {
+    process.nextTick(callback);
+  });
+
+  if (!request) callback(new Error());
+
+  request.on('error', function(e) {
+    callback(e);
+  });
+
+  request.write(JSON.stringify(data));
+  request.end();
+};
+
 
 // If no callback is provided, just log what we get
 function defaultCallback(e, b) {
