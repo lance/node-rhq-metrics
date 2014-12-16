@@ -1,5 +1,5 @@
 {
-  "name": "node-rhq-metrics",
+  "name": "rhq-metrics",
   "version": "0.1.0",
   "description": "Provides an interface to rhq-metrics REST API.",
   "scripts": {

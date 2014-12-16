@@ -6,7 +6,7 @@ This is a Javascript API and NPM module package for the `rhq-metrics` server.
 
 ## Usage
 
-    var RHQ = require('node-rhq-metrics');
+    var RHQ = require('rhq-metrics');
 
     var rhq = new RHQ({
       host: 'metricserver.com', // defaults to 'localhost'

@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>node-rhq-metrics</title>
+  <title>rhq-metrics</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -21,11 +21,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="node-rhq-metrics">node-rhq-metrics</h1>
+              <h1 id="rhq-metrics">rhq-metrics</h1>
 <p>Provides a simple asynchronous API in a Node.js environment for fetching 
 and writing time-series data in RHQ-metrics.</p>
 <h2 id="usage">Usage</h2>
-<pre><code><span class="hljs-keyword">var</span> RHQ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-rhq-metrics'</span>);
+<pre><code><span class="hljs-keyword">var</span> RHQ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rhq-metrics'</span>);
 <span class="hljs-keyword">var</span> rhq = <span class="hljs-keyword">new</span> RHQ({
   host: <span class="hljs-string">'servername.com'</span>,
   port: <span class="hljs-number">9000</span>
@@ -136,7 +136,7 @@ and max calculated for each interval.</li>
   });
 
   request.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
-    callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(e), <span class="hljs-literal">null</span>);
+    callback(e, <span class="hljs-literal">null</span>);
   });
 };</pre></div></div>
             

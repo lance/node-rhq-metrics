@@ -1,11 +1,11 @@
-// # node-rhq-metrics
+// # rhq-metrics
 //
 // Provides a simple asynchronous API in a Node.js environment for fetching 
 // and writing time-series data in RHQ-metrics.
 //
 // ## Usage
 //
-//     var RHQ = require('node-rhq-metrics');
+//     var RHQ = require('rhq-metrics');
 //     var rhq = new RHQ({
 //       host: 'servername.com',
 //       port: 9000
