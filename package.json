@@ -16,7 +16,6 @@
   "license": "Apache",
   "dependencies":
   {
-    "date-utils": "~1.2.16",
     "stream-buffers": "~1.1.0"
   },
   "repository":
