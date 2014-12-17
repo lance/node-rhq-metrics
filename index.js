@@ -128,7 +128,10 @@ RHQ.prototype.post = function(data, callback) {
     process.nextTick(callback);
   });
 
-  if (!request) callback(new Error());
+  if (!request) {
+    callback(new Error());
+    return false;
+  }
 
   request.on('error', function(e) {
     callback(e);
@@ -136,6 +139,7 @@ RHQ.prototype.post = function(data, callback) {
 
   request.write(JSON.stringify(data));
   request.end();
+  return true;
 };
 
 

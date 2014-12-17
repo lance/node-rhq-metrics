@@ -102,11 +102,11 @@ and max calculated for each interval.</li>
 
   <span class="hljs-keyword">switch</span> (<span class="hljs-keyword">typeof</span> options) {
     <span class="hljs-keyword">case</span> <span class="hljs-string">'object'</span>:
-      callback = callback || defaultCallback;
+      callback = callback || <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{};
       <span class="hljs-keyword">break</span>;
     <span class="hljs-keyword">case</span> <span class="hljs-string">'undefined'</span>:
       options = {};
-      callback = callback || defaultCallback;
+      callback = callback || <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{};
       <span class="hljs-keyword">break</span>;
     <span class="hljs-keyword">case</span> <span class="hljs-string">'function'</span>:
       callback = options;
@@ -154,7 +154,7 @@ and max calculated for each interval.</li>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p><em><strong>RHQ.prototype.get</strong></em> Get a set of time series data for a given <code>id</code>.</p>
+              <p><em><strong>RHQ.prototype.post</strong></em> Get a set of time series data.</p>
 <p><strong>data</strong> Timeseries data to post to the rhq-metrics server. Can be either
   an object or an array of objects. Data objects should have the 
   following properties.</p>
@@ -178,6 +178,7 @@ and max calculated for each interval.</li>
   };
 
   <span class="hljs-keyword">if</span> (!(data <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>)) data = [data];
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> callback !== <span class="hljs-string">'function'</span>) callback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{};
 
   <span class="hljs-keyword">var</span> request = http.request(httpOpts, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(res)</span> </span>{
     process.nextTick(callback);
@@ -202,27 +203,6 @@ and max calculated for each interval.</li>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>If no callback is provided, just log what we get</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">defaultCallback</span><span class="hljs-params">(e, b)</span> </span>{
-  <span class="hljs-keyword">if</span> (e) {
-    <span class="hljs-built_in">console</span>.error(e);
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-built_in">console</span>.log(b);
-  }
-}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
               <p>A dataset has a default start parameter of 8 hours ago.</p>
 
             </div>
@@ -234,11 +214,11 @@ and max calculated for each interval.</li>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>A dataset has a default end parameter of <code>Date.now()</code></p>
 
