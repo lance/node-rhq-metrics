@@ -58,11 +58,11 @@ RHQ.prototype.get = function(id, options, callback) {
 
   switch (typeof options) {
     case 'object':
-      callback = callback || defaultCallback;
+      callback = callback || function(){};
       break;
     case 'undefined':
       options = {};
-      callback = callback || defaultCallback;
+      callback = callback || function(){};
       break;
     case 'function':
       callback = options;
@@ -101,7 +101,7 @@ RHQ.prototype.get = function(id, options, callback) {
   });
 };
 
-// _**RHQ.prototype.get**_ Get a set of time series data for a given `id`.
+// _**RHQ.prototype.post**_ Get a set of time series data.
 // 
 // **data** Timeseries data to post to the rhq-metrics server. Can be either
 //   an object or an array of objects. Data objects should have the 
@@ -121,6 +121,7 @@ RHQ.prototype.post = function(data, callback) {
   };
 
   if (!(data instanceof Array)) data = [data];
+  if (typeof callback !== 'function') callback = function() {};
 
   var request = http.request(httpOpts, function(res) {
     process.nextTick(callback);
@@ -136,15 +137,6 @@ RHQ.prototype.post = function(data, callback) {
   request.end();
 };
 
-
-// If no callback is provided, just log what we get
-function defaultCallback(e, b) {
-  if (e) {
-    console.error(e);
-  } else {
-    console.log(b);
-  }
-}
 
 // A dataset has a default start parameter of 8 hours ago.
 function defaultStart() {
