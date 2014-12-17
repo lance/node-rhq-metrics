@@ -1,6 +1,6 @@
 {
   "name": "rhq-metrics",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Provides an interface to rhq-metrics REST API.",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
