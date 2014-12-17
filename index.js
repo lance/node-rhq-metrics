@@ -115,6 +115,7 @@ RHQ.prototype.post = function(data, callback) {
     port: this.port,
     path: this.path,
     method: 'POST',
+    agent: false,
     headers: {
       'Content-Type': 'application/json'
     }
