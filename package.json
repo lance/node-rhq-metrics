@@ -18,8 +18,9 @@
     "index.js",
     "LICENSE",
     "README.md"
-    ],
+  ],
   "dependencies": {
+    "q": "^1.1.2",
     "stream-buffers": "^1.1.0"
   },
   "devDependencies": {
@@ -29,7 +30,8 @@
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-docco": "^0.3.3",
     "grunt-mocha-test": "^0.12.4",
-    "mocha": "^2.0.1"
+    "mocha": "^2.0.1",
+    "nock": "^0.52.2"
   },
   "repository": {
     "type": "git",

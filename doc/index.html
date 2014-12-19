@@ -67,7 +67,9 @@ rhq.post({
   <span class="hljs-keyword">this</span>.host = options.host || <span class="hljs-string">'localhost'</span>;
   <span class="hljs-keyword">this</span>.port = options.port || <span class="hljs-number">8080</span>;
   <span class="hljs-keyword">this</span>.path = options.path || <span class="hljs-string">'/rhq-metrics/metrics'</span>;
-}</pre></div></div>
+}
+
+<span class="hljs-keyword">var</span> Q = <span class="hljs-built_in">require</span>(<span class="hljs-string">'q'</span>);</pre></div></div>
             
         </li>
         
@@ -99,14 +101,11 @@ and max calculated for each interval.</li>
             
             <div class="content"><div class='highlight'><pre>RHQ.prototype.get = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, options, callback)</span> </span>{
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> id !== <span class="hljs-string">'string'</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'id must be a string'</span>);
+  <span class="hljs-keyword">var</span> deferred = Q.defer();
 
   <span class="hljs-keyword">switch</span> (<span class="hljs-keyword">typeof</span> options) {
-    <span class="hljs-keyword">case</span> <span class="hljs-string">'object'</span>:
-      callback = callback || <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{};
-      <span class="hljs-keyword">break</span>;
     <span class="hljs-keyword">case</span> <span class="hljs-string">'undefined'</span>:
       options = {};
-      callback = callback || <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{};
       <span class="hljs-keyword">break</span>;
     <span class="hljs-keyword">case</span> <span class="hljs-string">'function'</span>:
       callback = options;
@@ -135,14 +134,15 @@ and max calculated for each interval.</li>
 
     res.on(<span class="hljs-string">'end'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
       process.nextTick(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{ 
-        callback(<span class="hljs-literal">null</span>, <span class="hljs-built_in">JSON</span>.parse(buffer.getContentsAsString(<span class="hljs-string">'utf8'</span>))); 
+        deferred.resolve(<span class="hljs-built_in">JSON</span>.parse(buffer.getContentsAsString(<span class="hljs-string">'utf8'</span>)));
       });
     });
   });
 
   request.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
-    callback(e);
+    deferred.reject(e);
   });
+  <span class="hljs-keyword">return</span> deferred.promise.nodeify(callback);
 };</pre></div></div>
             
         </li>
@@ -154,7 +154,7 @@ and max calculated for each interval.</li>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p><em><strong>RHQ.prototype.post</strong></em> Get a set of time series data.</p>
+              <p><em><strong>RHQ.prototype.post</strong></em> Post a set of time series data.</p>
 <p><strong>data</strong> Timeseries data to post to the rhq-metrics server. Can be either
   an object or an array of objects. Data objects should have the 
   following properties.</p>
@@ -167,31 +167,38 @@ and max calculated for each interval.</li>
             </div>
             
             <div class="content"><div class='highlight'><pre>RHQ.prototype.post = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, callback)</span> </span>{
+
+  <span class="hljs-keyword">if</span> (!data || (<span class="hljs-keyword">typeof</span> data !== <span class="hljs-string">'object'</span>)) 
+    <span class="hljs-keyword">throw</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Cannot post unknown type'</span>);
+  <span class="hljs-keyword">if</span> (!(data <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>)) data = [data];
+
+  <span class="hljs-keyword">var</span> deferred = Q.defer();
   <span class="hljs-keyword">var</span> httpOpts = {
     hostname: <span class="hljs-keyword">this</span>.host,
     port: <span class="hljs-keyword">this</span>.port,
     path: <span class="hljs-keyword">this</span>.path,
     method: <span class="hljs-string">'POST'</span>,
+    agent: <span class="hljs-literal">false</span>,
     headers: {
       <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>
     }
   };
 
-  <span class="hljs-keyword">if</span> (!(data <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>)) data = [data];
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> callback !== <span class="hljs-string">'function'</span>) callback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{};
-
   <span class="hljs-keyword">var</span> request = http.request(httpOpts, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(res)</span> </span>{
-    process.nextTick(callback);
+    deferred.resolve();
   });
 
-  <span class="hljs-keyword">if</span> (!request) callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>());
+  <span class="hljs-keyword">if</span> (!request) {
+    <span class="hljs-keyword">return</span> deferred.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Cannot request from '</span> + <span class="hljs-keyword">this</span>.host));
+  }
 
   request.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
-    callback(e);
+    deferred.reject(e);
   });
 
   request.write(<span class="hljs-built_in">JSON</span>.stringify(data));
   request.end();
+  <span class="hljs-keyword">return</span> deferred.promise.nodeify(callback);
 };</pre></div></div>
             
         </li>

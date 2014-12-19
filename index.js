@@ -35,6 +35,8 @@ function RHQ(options) {
   this.path = options.path || '/rhq-metrics/metrics';
 }
 
+var Q = require('q');
+
 // _**RHQ.prototype.get**_ Get a set of time series data for a given `id`.
 //
 // **id** a string identifier for the dataset. E.g. `'server1'`
@@ -55,14 +57,11 @@ function RHQ(options) {
 //
 RHQ.prototype.get = function(id, options, callback) {
   if (typeof id !== 'string') throw new TypeError('id must be a string');
+  var deferred = Q.defer();
 
   switch (typeof options) {
-    case 'object':
-      callback = callback || function(){};
-      break;
     case 'undefined':
       options = {};
-      callback = callback || function(){};
       break;
     case 'function':
       callback = options;
@@ -91,17 +90,18 @@ RHQ.prototype.get = function(id, options, callback) {
 
     res.on('end', function() {
       process.nextTick(function() { 
-        callback(null, JSON.parse(buffer.getContentsAsString('utf8'))); 
+        deferred.resolve(JSON.parse(buffer.getContentsAsString('utf8')));
       });
     });
   });
 
   request.on('error', function(e) {
-    callback(e);
+    deferred.reject(e);
   });
+  return deferred.promise.nodeify(callback);
 };
 
-// _**RHQ.prototype.post**_ Get a set of time series data.
+// _**RHQ.prototype.post**_ Post a set of time series data.
 // 
 // **data** Timeseries data to post to the rhq-metrics server. Can be either
 //   an object or an array of objects. Data objects should have the 
@@ -110,6 +110,12 @@ RHQ.prototype.get = function(id, options, callback) {
 //   * _value_ The numeric value for the data point, e.g. `89.34`
 //   * _timestamp_ Milliseconds since the epoch, e.g. `Date.now()`
 RHQ.prototype.post = function(data, callback) {
+
+  if (!data || (typeof data !== 'object')) 
+    throw TypeError('Cannot post unknown type');
+  if (!(data instanceof Array)) data = [data];
+
+  var deferred = Q.defer();
   var httpOpts = {
     hostname: this.host,
     port: this.port,
@@ -121,25 +127,21 @@ RHQ.prototype.post = function(data, callback) {
     }
   };
 
-  if (!(data instanceof Array)) data = [data];
-  if (typeof callback !== 'function') callback = function() {};
-
   var request = http.request(httpOpts, function(res) {
-    process.nextTick(callback);
+    deferred.resolve();
   });
 
   if (!request) {
-    callback(new Error());
-    return false;
+    return deferred.reject(new Error('Cannot request from ' + this.host));
   }
 
   request.on('error', function(e) {
-    callback(e);
+    deferred.reject(e);
   });
 
   request.write(JSON.stringify(data));
   request.end();
-  return true;
+  return deferred.promise.nodeify(callback);
 };
 
 
