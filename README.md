@@ -1,4 +1,4 @@
-# node-rqh-metrics
+# rqh-metrics-js
 
 [![Build Status](https://travis-ci.org/lance/rhq-metrics-js.svg?branch=master)](https://travis-ci.org/lance/rhq-metrics-js)
 
