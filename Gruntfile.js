@@ -3,12 +3,13 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    docco: {
-      debug: {
-        src: ['index.js'],
+    doxx: {
+      all: {
+        src: '.',
+        target: 'doc',
         options: {
-          output: 'doc/',
-          layout: 'classic'
+          title: 'rhq-metrics',
+          ignore: 'Gruntfile.js,node_modules,test'
         }
       }
     },
@@ -22,15 +23,22 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      all: ['Gruntfile.js', 'index.js', 'test/**/*.js']
+      all: ['Gruntfile.js', 'index.js', 'lib/**/*.js', 'test/**/*.js']
+    },
+    'gh-pages': {
+      options: {
+        base: 'doc'
+      },
+      src: ['**']
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-mocha-test');
-  grunt.loadNpmTasks('grunt-docco');
+  grunt.loadNpmTasks('grunt-doxx');
+  grunt.loadNpmTasks('grunt-gh-pages');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint', 'mochaTest', 'docco']);
+  grunt.registerTask('default', ['jshint', 'mochaTest', 'doxx']);
 
 };

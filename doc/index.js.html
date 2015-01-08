@@ -71,55 +71,213 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li class="active"><a href="index.html">Main</a></li>
-            <li><a href="index.js.html">index.js</a></li>
+            <li><a href="index.html">Main</a></li>
+            <li class="active"><a href="index.js.html">index.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#RHQ"><i class="alert alert-info"></i><span>RHQ</span></a>
+              </li>
+              <li><a href="#get"><i class="alert alert-info"></i><span>get</span></a>
+              </li>
+              <li><a href="#post"><i class="alert alert-info"></i><span>post</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="Main"><h1>rqh-metrics-js</h1>
-<p><a href="https://travis-ci.org/lance/rhq-metrics-js"><img src="https://travis-ci.org/lance/rhq-metrics-js.svg?branch=master" alt="Build Status"></a></p><p>This is a Javascript API and NPM module package for the <code>rhq-metrics</code> server.</p><h2>Usage</h2>
-<p>First you need to require the <code>rhq-metrics</code> module.</p><pre><code>var RHQ = require(&#39;rhq-metrics&#39;);
-</code></pre><p>The constructor function takes an options object where you can specify<br />values for the RHQ server hostname, the port, and the URL path. The<br />default URL for the server is <a href="http://localhost:8080/rhq-metrics/metrics">http://localhost:8080/rhq-metrics/metrics</a>.</p><pre><code>var rhq = new RHQ({
-  host: &#39;metricserver.com&#39;, // defaults to &#39;localhost&#39;
-  port: 4567, // defaults to 8080
-  path: &#39;/rhq-metrics/metrics&#39; // defaults to &#39;/rhq-metrics/metrics&#39;
+          <div class="description"><h1>rhq-metrics</h1>
+<p>Provides a simple asynchronous API in a Node.js environment for fetching<br />and writing time-series data in RHQ-metrics.</p><h2>Usage</h2>
+<pre><code>var RHQ = require(&#39;rhq-metrics&#39;);
+var rhq = new RHQ({
+  host: &#39;servername.com&#39;,
+  port: 9000
 });
-</code></pre><p>Timeseries data is posted as either a single JS object, or an array of objects.<br />In either case, the three fields are required: <code>id</code>, <code>value</code>, and <code>timestamp</code>.</p><pre><code>var data = [{id: &#39;server1&#39;, value: 44.1, timestamp: 1418672557728},
-            {id: &#39;server1&#39;, value: 23.9, timestamp: 1418672557738},
-            {id: &#39;server1&#39;, value: 34.7, timestamp: 1418672557748},
-            {id: &#39;server1&#39;, value: 68.5, timestamp: 1418672557758}];
-</code></pre><p>You can use a promises style API, or old school node-style callbacks.<br />Here is a promises usage.</p><pre><code>// all configuration parameters are optional
-var options = {
-  start: Date.now()-(4*60*60*1000), // defaults to 8 hours ago
-  end: Date.now(), // defaults to now
-  buckets: 20 // defaults to null - data is not bucketed
-};
 
-rhq.post(data)
-  .then(function() {
-    rhq.get(&#39;server1&#39;, options)
-      .then(function(data) {
-        // data is an array of timeseries objects for &#39;server1&#39;
-        // [{&#39;timestamp&#39;: 1418672557728, &#39;value&#39;: 72.3}]
-       });
-  });
-</code></pre><p>And here is the old school, node style.</p><pre><code>rhq.post(data,
-  function() {
-    rhq.get(&#39;server1&#39;, options, function(er, result) {
-        // result is an array of timeseries data
-        // [{&#39;timestamp&#39;: 1418672557728, &#39;value&#39;: 72.3}]
+rhq.post({
+  id: &#39;server1&#39;,
+  value: 93.2,
+  timestamp: Date.now()}, function(e) {
+    rhq.get(&#39;server1&#39;, function(err, result) {
+      console.log(result);
     });
   });
-</code></pre><h2>Development</h2>
-<p>First clone the project.</p><pre><code>$ git clone https://github.com/lance/node-rhq-metrics.git
-</code></pre><p>Then change into the project directory, install the dev dependencies, and build it.</p><pre><code>$ cd node-rhq-metrics
-$ npm install
-$ grunt
-</code></pre><p>This will run all tests and generate documentation.</p></section>
+</code></pre> </div>
+          <section id="RHQ">
+            <h1>RHQ</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>RHQ()</span> -><span>Object</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>options</td>
+                <td>Object</td>
+                <td>RHQ server options.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Create a new RHQ object instance. Options are:<br /><code>options.host</code> - the server hostname. Defaults to <code>&#39;localhost&#39;</code><br /><code>options.port</code> - the server port. Defaults to <code>8080</code><br /><code>options.path</code> - the REST API path. Defaults to <code>&#39;/rhq-metrics/metrics&#39;</code> </p> </div>
+          <pre><code class="language-javascript">function RHQ(options) {
+  if (!(this instanceof RHQ)) return new RHQ(options);
+  options = options || {};
+  this.host = options.host || 'localhost';
+  this.port = options.port || 8080;
+  this.path = options.path || '/rhq-metrics/metrics';
+}</code></pre>
+          <section id="get">
+            <h1>get</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>RHQ.prototype.get()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>String</td>
+                <td>A string identifier for the dataset. E.g. `'server1'` </td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>Object</td>
+                <td>An object specifying query options (optional) </td>
+              </tr>
+              <tr>
+                <td>callback</td>
+                <td>Function</td>
+                <td>An optional callback function.    It will be called when all data has been retrieved and buffered.
+  Parameters for the callback function are a possible error, and response
+  data as an Array.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Get an array of time series data for a given <code>id</code>.</p><p>The options parameter recognizes the following properties:<br />  <code>options.start</code> - the start date in msec since the epoch. Defaults to<br />  now - 8 hours<br />  <code>options.end</code> - the end date for the dataset in msec since the epoch.<br />  Defaults to now.<br />  <code>options.buckets</code> - number of intervals (buckets) to divide the time<br />  range. Setting this to 60, for example, will return 60 equally spaced<br />  intervals for the time period between start and end time, having min, avg,<br />  and max calculated for each interval.</p> </div>
+          <pre><code class="language-javascript">RHQ.prototype.get = function(id, options, callback) {
+  if (typeof id !== 'string') throw new TypeError('id must be a string');
+  var deferred = Q.defer();
+
+  switch (typeof options) {
+    case 'undefined':
+      options = {};
+      break;
+    case 'function':
+      callback = options;
+      options = {};
+      break;
+  }
+
+  var path = [this.path, id].join('/') +
+             '?start=' + (options.start || defaultStart()) +
+             '&amp;end=' + (options.end || defaultEnd());
+
+  if (options.buckets) path += '&amp;buckets=' + options.buckets;
+
+  var httpOpts = {
+    hostname: this.host,
+    port: this.port,
+    path: path,
+  };
+
+  var request = http.get(httpOpts, function(res) {
+    var buffer = new streamBuffers.WritableStreamBuffer();
+
+    res.on('data', function(chunk) {
+      buffer.write(chunk);
+    });
+
+    res.on('end', function() {
+      process.nextTick(function() { 
+        deferred.resolve(JSON.parse(buffer.getContentsAsString('utf8')));
+      });
+    });
+  });
+
+  request.on('error', function(e) {
+    deferred.reject(e);
+  });
+  return deferred.promise.nodeify(callback);
+};</code></pre>
+          <section id="post">
+            <h1>post</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>RHQ.prototype.post()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>data</td>
+                <td>Object,Array</td>
+                <td>Time series data for the rhq-metrics server. </td>
+              </tr>
+              <tr>
+                <td>callback</td>
+                <td>Function</td>
+                <td>An optional callback function</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Post a set of time series data. The data can be either an object or an array<br />of objects. The data objects themselves should have the following properties:</p><p>  <code>data.id</code> - The string ID for the data point, e.g. <code>cpu1</code><br />  <code>data.value</code> The numeric value for the data point, e.g. <code>89.34</code><br />  <code>data.timestamp</code> Milliseconds since the epoch, e.g. <code>Date.now()</code></p> </div>
+          <pre><code class="language-javascript">RHQ.prototype.post = function(data, callback) {
+
+  if (!data || (typeof data !== 'object')) 
+    throw TypeError('Cannot post unknown type');
+  if (!(data instanceof Array)) data = [data];
+
+  var deferred = Q.defer();
+  var httpOpts = {
+    hostname: this.host,
+    port: this.port,
+    path: this.path,
+    method: 'POST',
+    agent: false,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  var request = http.request(httpOpts, function(res) {
+    deferred.resolve();
+  });
+
+  if (!request) {
+    return deferred.reject(new Error('Cannot request from ' + this.host));
+  }
+
+  request.on('error', function(e) {
+    deferred.reject(e);
+  });
+
+  request.write(JSON.stringify(data));
+  request.end();
+  return deferred.promise.nodeify(callback);
+};</code></pre>
         </div>
       </div>
     </div>
