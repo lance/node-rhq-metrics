@@ -4,6 +4,9 @@
 
 This is a Javascript API and NPM module package for the `rhq-metrics` server.
 
+## Documentation
+Docs are found at http://lanceball.com/rhq-metrics-js
+
 ## Usage
 First you need to require the `rhq-metrics` module.
 
