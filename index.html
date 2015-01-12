@@ -81,7 +81,8 @@
         </div>
         <div class="span9">
           <section id="Main"><h1>rqh-metrics-js</h1>
-<p><a href="https://travis-ci.org/lance/rhq-metrics-js"><img src="https://travis-ci.org/lance/rhq-metrics-js.svg?branch=master" alt="Build Status"></a></p><p>This is a Javascript API and NPM module package for the <code>rhq-metrics</code> server.</p><h2>Usage</h2>
+<p><a href="https://travis-ci.org/lance/rhq-metrics-js"><img src="https://travis-ci.org/lance/rhq-metrics-js.svg?branch=master" alt="Build Status"></a></p><p>This is a Javascript API and NPM module package for the <code>rhq-metrics</code> server.</p><h2>Documentation</h2>
+<p>Docs are found at <a href="http://lanceball.com/rhq-metrics-js">http://lanceball.com/rhq-metrics-js</a></p><h2>Usage</h2>
 <p>First you need to require the <code>rhq-metrics</code> module.</p><pre><code>var RHQ = require(&#39;rhq-metrics&#39;);
 </code></pre><p>The constructor function takes an options object where you can specify<br />values for the RHQ server hostname, the port, and the URL path. The<br />default URL for the server is <a href="http://localhost:8080/rhq-metrics/metrics">http://localhost:8080/rhq-metrics/metrics</a>.</p><pre><code>var rhq = new RHQ({
   host: &#39;metricserver.com&#39;, // defaults to &#39;localhost&#39;
